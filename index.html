@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artbyo3 - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .gradient-bg-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .gradient-bg-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .gradient-bg-4 {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        .gradient-bg-5 {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        .gradient-bg-6 {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        /* Modal styles */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            pointer-events: none;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .modal-content {
+            transform: translate(-50%, -48%) scale(0.98);
+            transition: transform 0.2s ease;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
+        .modal.active .modal-content {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .project-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            will-change: transform;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .glass-button-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+        
+        .glass-button-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Art Portfolio Card Styles */
+        .art-portfolio-card {
+            background: linear-gradient(135deg, 
+                rgba(236, 72, 153, 0.08) 0%, 
+                rgba(147, 51, 234, 0.08) 50%, 
+                rgba(79, 70, 229, 0.08) 100%);
+            border: 1px solid;
+            border-image: linear-gradient(135deg, 
+                rgba(236, 72, 153, 0.25), 
+                rgba(147, 51, 234, 0.25), 
+                rgba(79, 70, 229, 0.25)) 1;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 24px rgba(236, 72, 153, 0.08);
+            height: auto;
+            min-height: 120px;
+        }
+
+        .art-portfolio-card:hover {
+            border-image: linear-gradient(135deg, 
+                rgba(236, 72, 153, 0.4), 
+                rgba(147, 51, 234, 0.4), 
+                rgba(79, 70, 229, 0.4)) 1;
+            box-shadow: 0 12px 32px rgba(236, 72, 153, 0.15);
+            transform: scale(1.02) !important;
+        }
+
+        /* 3D Multi-Layer Background */
+        .art-3d-layers {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .art-layer {
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .art-layer-1 {
+            background: linear-gradient(135deg, 
+                rgba(236, 72, 153, 0.15) 0%, 
+                rgba(147, 51, 234, 0.1) 50%, 
+                rgba(79, 70, 229, 0.1) 100%);
+            transform: translateZ(-20px);
+            filter: blur(1px);
+        }
+
+        .art-layer-2 {
+            background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.1) 0%, 
+                rgba(79, 70, 229, 0.15) 50%, 
+                rgba(236, 72, 153, 0.1) 100%);
+            transform: translateZ(-10px);
+            filter: blur(0.5px);
+        }
+
+        .art-layer-3 {
+            background: linear-gradient(135deg, 
+                rgba(79, 70, 229, 0.1) 0%, 
+                rgba(236, 72, 153, 0.1) 50%, 
+                rgba(147, 51, 234, 0.15) 100%);
+            transform: translateZ(-5px);
+            filter: blur(0.25px);
+        }
+
+        .art-layer-4 {
+            background: linear-gradient(135deg, 
+                rgba(236, 72, 153, 0.05) 0%, 
+                rgba(147, 51, 234, 0.05) 50%, 
+                rgba(79, 70, 229, 0.05) 100%);
+            transform: translateZ(0px);
+        }
+
+        /* Enhanced Art Pattern */
+        .art-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(79, 70, 229, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 60% 60%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+            background-size: 80px 80px, 120px 120px, 100px 100px, 90px 90px;
+            background-position: 0 0, 40px 40px, 80px 0, 120px 60px;
+            animation: artPatternMove 15s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        /* Floating Artistic Elements */
+        .art-floating-elements {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .art-element {
+            position: absolute;
+            border-radius: 50%;
+            animation: artFloat 8s ease-in-out infinite;
+        }
+
+        .art-element-1 {
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.8), rgba(236, 72, 153, 0.3));
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .art-element-2 {
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.8), rgba(147, 51, 234, 0.3));
+            top: 25%;
+            right: 15%;
+            animation-delay: 1.5s;
+        }
+
+        .art-element-3 {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.8), rgba(79, 70, 229, 0.3));
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 3s;
+        }
+
+        .art-element-4 {
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.6), rgba(236, 72, 153, 0.2));
+            top: 60%;
+            right: 25%;
+            animation-delay: 4.5s;
+        }
+
+        .art-element-5 {
+            width: 7px;
+            height: 7px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.6), rgba(147, 51, 234, 0.2));
+            bottom: 30%;
+            right: 10%;
+            animation-delay: 6s;
+        }
+
+        /* 3D Content Elements */
+        .art-content-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .art-icon-3d {
+            transform: translateZ(20px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .art-icon-glow {
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, 
+                rgba(236, 72, 153, 0.4), 
+                rgba(147, 51, 234, 0.4), 
+                rgba(79, 70, 229, 0.4));
+            border-radius: 1rem;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .art-portfolio-card:hover .art-icon-glow {
+            opacity: 1;
+        }
+
+        .art-text-3d {
+            transform: translateZ(15px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .art-title-3d {
+            background: linear-gradient(135deg, 
+                #ec4899 0%, 
+                #a855f7 25%, 
+                #6366f1 50%, 
+                #8b5cf6 75%, 
+                #ec4899 100%);
+            background-size: 200% 200%;
+            animation: artGradientShift 4s ease-in-out infinite;
+        }
+
+        .art-tags-3d {
+            transform: translateZ(10px);
+        }
+
+        .art-tag {
+            transition: all 0.3s ease;
+            transform: translateZ(5px);
+        }
+
+        .art-tag:hover {
+            transform: translateZ(8px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
+
+        .art-button-3d {
+            transform: translateZ(25px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .art-button-glow {
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, 
+                rgba(236, 72, 153, 0.6), 
+                rgba(147, 51, 234, 0.6), 
+                rgba(79, 70, 229, 0.6));
+            border-radius: 0.5rem;
+            filter: blur(6px);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .art-portfolio-card:hover .art-button-glow {
+            opacity: 0.8;
+        }
+
+        /* Enhanced 3D Floating Elements */
+        .art-3d-floating-elements {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .art-3d-element {
+            position: absolute;
+            border-radius: 50%;
+            animation: art3DFloat 12s ease-in-out infinite;
+            filter: blur(0.5px);
+        }
+
+        .art-3d-element-1 {
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.9), rgba(236, 72, 153, 0.2));
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+            transform: translateZ(30px);
+        }
+
+        .art-3d-element-2 {
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.9), rgba(147, 51, 234, 0.2));
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+            transform: translateZ(20px);
+        }
+
+        .art-3d-element-3 {
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.9), rgba(79, 70, 229, 0.2));
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 4s;
+            transform: translateZ(40px);
+        }
+
+        .art-3d-element-4 {
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.7), rgba(236, 72, 153, 0.1));
+            top: 70%;
+            right: 20%;
+            animation-delay: 6s;
+            transform: translateZ(15px);
+        }
+
+        .art-3d-element-5 {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.7), rgba(147, 51, 234, 0.1));
+            bottom: 25%;
+            right: 5%;
+            animation-delay: 8s;
+            transform: translateZ(25px);
+        }
+
+        .art-3d-element-6 {
+            width: 5px;
+            height: 5px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.6), rgba(79, 70, 229, 0.1));
+            top: 50%;
+            left: 50%;
+            animation-delay: 10s;
+            transform: translateZ(35px);
+        }
+
+        /* Animations */
+        @keyframes artPatternMove {
+            0%, 100% { 
+                background-position: 0 0, 40px 40px, 80px 0, 120px 60px; 
+                opacity: 0.3;
+            }
+            25% { 
+                background-position: 40px 40px, 80px 0, 120px 60px, 0 100px; 
+                opacity: 0.4;
+            }
+            50% { 
+                background-position: 80px 0, 120px 60px, 0 100px, 40px 40px; 
+                opacity: 0.5;
+            }
+            75% { 
+                background-position: 120px 60px, 0 100px, 40px 40px, 80px 0; 
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes artFloat {
+            0%, 100% { 
+                transform: translateY(0px) scale(1); 
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateY(-8px) scale(1.1); 
+                opacity: 1;
+            }
+        }
+
+        @keyframes art3DFloat {
+            0%, 100% { 
+                transform: translateY(0px) translateZ(20px) scale(1); 
+                opacity: 0.7;
+            }
+            33% { 
+                transform: translateY(-6px) translateZ(30px) scale(1.05); 
+                opacity: 0.9;
+            }
+            66% { 
+                transform: translateY(-3px) translateZ(25px) scale(1.1); 
+                opacity: 1;
+            }
+        }
+
+        @keyframes artGradientShift {
+            0%, 100% { 
+                background-position: 0% 50%; 
+            }
+            50% { 
+                background-position: 100% 50%; 
+            }
+        }
+
+        /* Enhanced Hover States */
+        .art-portfolio-card.art-hover-active .art-layer {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .art-portfolio-card.art-hover-active .art-element,
+        .art-portfolio-card.art-hover-active .art-3d-element {
+            animation-play-state: running;
+        }
+
+        .art-portfolio-card.art-hover-active .art-icon-3d {
+            transform: translateZ(30px) scale(1.05);
+        }
+
+        .art-portfolio-card.art-hover-active .art-text-3d {
+            transform: translateZ(25px);
+        }
+
+        .art-portfolio-card.art-hover-active .art-button-3d {
+            transform: translateZ(35px) scale(1.05);
+        }
+
+        .art-portfolio-card.art-hover-active .art-tag {
+            transform: translateZ(15px) scale(1.02);
+        }
+
+        .art-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(79, 70, 229, 0.3) 0%, transparent 50%);
+            background-size: 100px 100px, 150px 150px, 120px 120px;
+            background-position: 0 0, 50px 50px, 100px 0;
+            animation: artPatternMove 10s ease-in-out infinite;
+        }
+
+        @keyframes artPatternMove {
+            0%, 100% { 
+                background-position: 0 0, 50px 50px, 100px 0; 
+                opacity: 0.3;
+            }
+            50% { 
+                background-position: 50px 50px, 100px 0, 0 100px; 
+                opacity: 0.5;
+            }
+        }
+
+        .art-cta-button {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .art-cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .art-cta-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Prevenir scroll horizontal */
+        .glass-card {
+            overflow: hidden;
+        }
+        
+        /* Contenedor del modal: cubre viewport para posicionar contenido con coordenadas absolutas */
+        .modal {
+            position: fixed;
+            inset: 0;
+        }
+
+        /* Modal más vertical y compacto */
+        .modal .modal-content {
+            width: min(92vw, 560px);
+            max-height: 85vh;
+        }
+        
+        /* --- Parallax Background --- */
+        #parallax-root { background: #0a0a0a; }
+        .parallax-layer {
+            position: absolute;
+            inset: -10%;
+            filter: blur(18px) contrast(1.05) saturate(1.2);
+            background: radial-gradient(600px 600px at var(--c1x, 20%) var(--c1y, 30%), rgba(255,170,0,0.25), transparent 60%),
+                        radial-gradient(700px 700px at var(--c2x, 80%) var(--c2y, 70%), rgba(255,210,80,0.22), transparent 65%),
+                        radial-gradient(500px 500px at var(--c3x, 60%) var(--c3y, 20%), rgba(255,120,0,0.2), transparent 60%);
+            opacity: 0.9;
+        }
+        .parallax-layer:nth-child(2) {
+            background: radial-gradient(700px 700px at var(--c1x, 15%) var(--c1y, 75%), rgba(255,170,0,0.16), transparent 62%),
+                        radial-gradient(600px 600px at var(--c2x, 75%) var(--c2y, 25%), rgba(255,200,60,0.15), transparent 60%),
+                        radial-gradient(500px 500px at var(--c3x, 45%) var(--c3y, 55%), rgba(255,120,0,0.14), transparent 55%);
+            opacity: 0.8;
+        }
+        .parallax-layer:nth-child(3) {
+            background: radial-gradient(520px 520px at var(--c1x, 30%) var(--c1y, 40%), rgba(255,170,0,0.22), transparent 55%),
+                        radial-gradient(520px 520px at var(--c2x, 70%) var(--c2y, 60%), rgba(255,200,60,0.18), transparent 60%);
+            opacity: 0.85;
+        }
+        .parallax-glass {
+            position: absolute;
+            inset: -24px; /* extiende para evitar bordes visibles en el límite superior */
+            background:
+                radial-gradient(1200px 800px at 50% 120%, rgba(255,255,255,0.05), transparent 72%),
+                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            pointer-events: none;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        /* 3D Tilt multilayer para tarjetas */
+        .modal-trigger {
+            position: relative;
+            transform-style: preserve-3d;
+            will-change: transform;
+            --rx: 0deg; /* rotación X */
+            --ry: 0deg; /* rotación Y */
+            --scale: 1; /* escala */
+            --mx: 50%; /* mouse X relativo, para brillos */
+            --my: 50%; /* mouse Y relativo, para brillos */
+            transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--scale));
+            transition: transform 180ms ease;
+            overflow: hidden;
+        }
+        .modal-trigger:hover {
+            --scale: 1.03;
+        }
+        /* Capa de brillo/parallax posterior */
+        .modal-trigger::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: radial-gradient(1200px 600px at var(--mx) calc(var(--my) + 40%), rgba(255,255,255,0.12), transparent 60%);
+            transform: translateZ(20px);
+            pointer-events: none;
+            transition: opacity 180ms ease;
+        }
+        /* Capa superior suave */
+        .modal-trigger::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            mix-blend-mode: screen;
+            transform: translateZ(40px);
+            pointer-events: none;
+        }
+        /* Contenido principal ligeramente al frente */
+        .modal-trigger .text-center {
+            position: relative;
+            transform: translateZ(60px);
+            will-change: transform;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .modal-trigger { transition: none; }
+            .modal-trigger::before, .modal-trigger::after { transition: none; }
+        }
+        
+
+        
+
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    
+
+    <!-- Parallax Background Layers -->
+    <div id="parallax-root" class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <!-- Layer 1: dark base -->
+        <div class="parallax-layer" data-depth="0.05" style="top:-16px;left:-16px;right:-16px;bottom:-16px"></div>
+        <!-- Layer 2: lava blobs back -->
+        <div class="parallax-layer" data-depth="0.12" style="top:-16px;left:-16px;right:-16px;bottom:-16px"></div>
+        <!-- Layer 3: lava blobs mid -->
+        <div class="parallax-layer" data-depth="0.2" style="top:-16px;left:-16px;right:-16px;bottom:-16px"></div>
+        <!-- Layer 4: glass overlay -->
+        <div class="parallax-glass" data-depth="0.3"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="fixed left-4 top-4 bottom-4 w-80 z-40">
+        <div class="glass h-full rounded-3xl p-8 flex flex-col">
+            <!-- Header Section -->
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <span class="text-3xl font-bold text-white">A</span>
+                </div>
+                <h1 class="text-3xl font-bold text-white mb-2">Artbyo3</h1>
+                <p class="text-purple-200 text-sm">Project Portfolio</p>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="flex-1">
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-white flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6.5a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"/>
+                        </svg>
+                        Have a project?
+                    </h3>
+                    <p class="text-purple-200 text-sm mb-6 leading-relaxed">Available for collaborations and new challenges. Always open to exploring emerging technologies and solving creative problems.</p>
+                    
+                    <!-- Contact Buttons -->
+                    <div class="space-y-3">
+                        <a href="mailto:contact@artbyo3.com" class="glass-button-secondary block w-full text-center py-3 px-4 rounded-xl hover:bg-white/20 transition-all duration-300 group">
+                            <div class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                                </svg>
+                                Send Email
+                            </div>
+                        </a>
+                        <a href="https://github.com/artbyo3" class="glass-button-secondary block w-full text-center py-3 px-4 rounded-xl hover:bg-white/20 transition-all duration-300 group">
+                            <div class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"/>
+                                </svg>
+                                View GitHub
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="bg-white/5 rounded-2xl p-6 mb-6">
+                    <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        Statistics
+                    </h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-purple-300">25+</div>
+                            <div class="text-xs text-purple-200">Projects</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-pink-300">3+</div>
+                            <div class="text-xs text-pink-200">Years Exp</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Links -->
+                <div class="space-y-3">
+                    <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        Connect
+                    </h4>
+                    <div class="grid grid-cols-3 gap-3">
+                        <a href="#" class="h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-white/20 transition-all duration-300 group hover:scale-105">
+                            <svg class="w-6 h-6 text-purple-300 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-white/20 transition-all duration-300 group hover:scale-105">
+                            <svg class="w-6 h-6 text-purple-300 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.02-1.832-3.02-1.833 0-2.136 1.416-2.136 2.77v5.819h-3.554V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-white/20 transition-all duration-300 group hover:scale-105">
+                            <svg class="w-6 h-6 text-purple-300 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-auto pt-6 text-center">
+                <div class="text-purple-200 text-sm mb-2">Available for projects</div>
+                <div class="text-purple-300 text-xs">&copy; 2024 Artbyo3</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="pt-8 pb-12 pr-6 pl-[320px] relative">
+        <div class="max-w-6xl mx-auto">
+            <!-- Hero -->
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    My Projects
+                </h2>
+                <p class="text-xl text-purple-200 max-w-2xl mx-auto">
+                    Different types of projects organized by categories
+                </p>
+            </div>
+
+
+
+            <!-- Categories Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                                 <!-- Sitios Web Estáticos -->
+                 <div class="glass-card rounded-2xl p-8 gradient-bg hover:scale-105 transition-all duration-300 cursor-pointer modal-trigger" 
+                      data-modal="websites">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0-9c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Websites</h3>
+                        <p class="text-white/80 mb-6">Landing pages, portfolios and static corporate sites</p>
+                        <div class="space-y-2">
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">HTML5/CSS</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">JavaScript</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Responsive</span>
+                        </div>
+                        <div class="mt-4 text-white/60 text-sm">Hover to see projects</div>
+                    </div>
+                </div>
+
+                                 <!-- Aplicaciones Web -->
+                 <div class="glass-card rounded-2xl p-8 gradient-bg-2 hover:scale-105 transition-all duration-300 cursor-pointer modal-trigger" 
+                      data-modal="webapps">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Web Applications</h3>
+                        <p class="text-white/80 mb-6">Dynamic apps with interactive features</p>
+                        <div class="space-y-2">
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">React</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Vue.js</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Node.js</span>
+                        </div>
+                        <div class="mt-4 text-white/60 text-sm">Hover to see projects</div>
+                    </div>
+                </div>
+
+                                 <!-- Programas de Escritorio -->
+                 <div class="glass-card rounded-2xl p-8 gradient-bg-3 hover:scale-105 transition-all duration-300 cursor-pointer modal-trigger" 
+                      data-modal="desktop">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Software</h3>
+                        <p class="text-white/80 mb-6">Desktop software and utilities</p>
+                        <div class="space-y-2">
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Python</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">C++</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Java</span>
+                        </div>
+                        <div class="mt-4 text-white/60 text-sm">Hover to see projects</div>
+                    </div>
+                </div>
+
+                                 <!-- Aplicaciones Móviles -->
+                 <div class="glass-card rounded-2xl p-8 gradient-bg-4 hover:scale-105 transition-all duration-300 cursor-pointer modal-trigger" 
+                      data-modal="mobile">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Mobile Apps</h3>
+                        <p class="text-white/80 mb-6">Applications for iOS and Android</p>
+                        <div class="space-y-2">
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">React Native</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Flutter</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Swift</span>
+                        </div>
+                        <div class="mt-4 text-white/60 text-sm">Hover to see projects</div>
+                    </div>
+                </div>
+
+                                 <!-- Juegos -->
+                 <div class="glass-card rounded-2xl p-8 gradient-bg-5 hover:scale-105 transition-all duration-300 cursor-pointer modal-trigger" 
+                      data-modal="games">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Games</h3>
+                        <p class="text-white/80 mb-6">2D and 3D video game development</p>
+                        <div class="space-y-2">
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Unity</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Godot</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Canvas</span>
+                        </div>
+                        <div class="mt-4 text-white/60 text-sm">Hover to see projects</div>
+                    </div>
+                </div>
+
+                                 <!-- IA y ML -->
+                 <div class="glass-card rounded-2xl p-8 gradient-bg-6 hover:scale-105 transition-all duration-300 cursor-pointer modal-trigger" 
+                      data-modal="ai">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">AI & Machine Learning</h3>
+                        <p class="text-white/80 mb-6">Artificial intelligence projects</p>
+                        <div class="space-y-2">
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">Python</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">TensorFlow</span>
+                            <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm">PyTorch</span>
+                        </div>
+                        <div class="mt-4 text-white/60 text-sm">Hover to see projects</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Special Art Portfolio Card - End of Page -->
+            <div class="mt-16 flex justify-center">
+                <div class="art-portfolio-card glass-card rounded-2xl p-6 max-w-2xl w-full relative overflow-hidden group cursor-pointer transform hover:scale-102 transition-all duration-500" onclick="window.open('https://your-art-portfolio-url.com', '_blank')">
+                    <!-- 3D Multi-Layer Background -->
+                    <div class="art-3d-layers">
+                        <div class="art-layer art-layer-1"></div>
+                        <div class="art-layer art-layer-2"></div>
+                        <div class="art-layer art-layer-3"></div>
+                        <div class="art-layer art-layer-4"></div>
+                    </div>
+                    
+                    <!-- Artistic Background Pattern -->
+                    <div class="art-pattern"></div>
+                    
+                    <!-- Floating Artistic Elements -->
+                    <div class="art-floating-elements">
+                        <div class="art-element art-element-1"></div>
+                        <div class="art-element art-element-2"></div>
+                        <div class="art-element art-element-3"></div>
+                        <div class="art-element art-element-4"></div>
+                        <div class="art-element art-element-5"></div>
+                    </div>
+                    
+                    <!-- Content - Horizontal Layout with 3D Depth -->
+                    <div class="art-content-3d relative z-10 flex items-center gap-6">
+                        <!-- Icon Section with 3D Effect -->
+                        <div class="flex-shrink-0 art-icon-3d">
+                            <div class="w-16 h-16 bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-500 relative overflow-hidden">
+                                <div class="art-icon-glow"></div>
+                                <svg class="w-8 h-8 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Text Content with 3D Depth -->
+                        <div class="flex-1 art-text-3d">
+                            <h3 class="text-2xl font-bold mb-2 bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-400 bg-clip-text text-transparent art-title-3d">
+                                Art Portfolio
+                            </h3>
+                            <p class="text-white/80 mb-4 text-sm leading-relaxed art-description-3d">
+                                Explore my creative side beyond code. Digital art, illustrations, and visual designs.
+                            </p>
+                            <div class="flex flex-wrap gap-2 art-tags-3d">
+                                <span class="px-2 py-1 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-400/30 rounded-full text-xs text-pink-200 art-tag">Digital Art</span>
+                                <span class="px-2 py-1 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border border-purple-400/30 rounded-full text-xs text-purple-200 art-tag">Illustrations</span>
+                                <span class="px-2 py-1 bg-gradient-to-r from-indigo-500/20 to-blue-500/20 border border-indigo-400/30 rounded-full text-xs text-indigo-200 art-tag">Visual Design</span>
+                            </div>
+                        </div>
+                        
+                        <!-- CTA Button with 3D Effect -->
+                        <div class="flex-shrink-0 art-button-3d">
+                            <div class="art-cta-button bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:via-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 transform group-hover:scale-105 shadow-lg text-sm relative overflow-hidden">
+                                <div class="art-button-glow"></div>
+                                <span class="relative z-10">View Portfolio →</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Floating Elements with 3D -->
+                    <div class="art-3d-floating-elements">
+                        <div class="art-3d-element art-3d-element-1"></div>
+                        <div class="art-3d-element art-3d-element-2"></div>
+                        <div class="art-3d-element art-3d-element-3"></div>
+                        <div class="art-3d-element art-3d-element-4"></div>
+                        <div class="art-3d-element art-3d-element-5"></div>
+                        <div class="art-3d-element art-3d-element-6"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modals -->
+              <!-- Sitios Web Modal -->
+     <div id="websites-modal" class="modal fixed z-50">
+         <div class="modal-content glass-card rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+             <div class="text-center mb-6">
+                 <h3 class="text-3xl font-bold">Static Websites</h3>
+             </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Portfolio Personal</h4>
+                    <p class="text-white/80 mb-4">Portfolio minimalista con diseño responsive y animaciones CSS</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">HTML5</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">CSS3</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">JavaScript</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Landing Page E-commerce</h4>
+                    <p class="text-white/80 mb-4">E-commerce landing page with forms and validation</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">HTML5</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Tailwind CSS</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Alpine.js</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+              <!-- Aplicaciones Web Modal -->
+     <div id="webapps-modal" class="modal fixed z-50">
+         <div class="modal-content glass-card rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+             <div class="text-center mb-6">
+                 <h3 class="text-3xl font-bold">Web Applications</h3>
+             </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Task Manager</h4>
+                    <p class="text-white/80 mb-4">Task management application with drag & drop and local persistence</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">React</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">TypeScript</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">LocalStorage</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Weather Dashboard</h4>
+                    <p class="text-white/80 mb-4">Weather dashboard with multiple cities and interactive charts</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Vue.js</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Chart.js</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">OpenWeather API</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+              <!-- Programas Modal -->
+     <div id="desktop-modal" class="modal fixed z-50">
+         <div class="modal-content glass-card rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+             <div class="text-center mb-6">
+                 <h3 class="text-3xl font-bold">Desktop Software</h3>
+             </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">File Organizer</h4>
+                    <p class="text-white/80 mb-4">Utility to automatically organize files by type and date</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Python</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Tkinter</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">OS Module</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Password Generator</h4>
+                    <p class="text-white/80 mb-4">Secure password generator with customizable options</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">C++</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Qt Framework</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Cryptography</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+              <!-- Apps Móviles Modal -->
+     <div id="mobile-modal" class="modal fixed z-50">
+         <div class="modal-content glass-card rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+             <div class="text-center mb-6">
+                 <h3 class="text-3xl font-bold">Mobile Applications</h3>
+             </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Fitness Tracker</h4>
+                    <p class="text-white/80 mb-4">App for exercise tracking and physical progress</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">React Native</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Firebase</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">AsyncStorage</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Recipe Manager</h4>
+                    <p class="text-white/80 mb-4">Recipe manager with search and favorites</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Flutter</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Dart</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">SQLite</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+              <!-- Juegos Modal -->
+     <div id="games-modal" class="modal fixed z-50">
+         <div class="modal-content glass-card rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+             <div class="text-center mb-6">
+                 <h3 class="text-3xl font-bold">Game Development</h3>
+             </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Platform Runner</h4>
+                    <p class="text-white/80 mb-4">2D platform game with physics and scoring system</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Unity</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">C#</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">2D Physics</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Puzzle Game</h4>
+                    <p class="text-white/80 mb-4">Puzzle game with progressive levels</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">HTML5 Canvas</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">JavaScript</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Game Loop</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+              <!-- IA Modal -->
+     <div id="ai-modal" class="modal fixed z-50">
+         <div class="modal-content glass-card rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+             <div class="text-center mb-6">
+                 <h3 class="text-3xl font-bold">AI & Machine Learning</h3>
+             </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Image Classifier</h4>
+                    <p class="text-white/80 mb-4">Image classifier using CNN and transfer learning</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Python</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">TensorFlow</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">OpenCV</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+                <div class="project-card rounded-xl p-6">
+                    <h4 class="text-xl font-semibold mb-3">Chatbot NLP</h4>
+                    <p class="text-white/80 mb-4">Conversational chatbot with natural language processing</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Python</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Transformers</span>
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm">Flask API</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-300 hover:text-blue-200">Demo</a>
+                        <a href="#" class="text-green-300 hover:text-green-200">Code</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- JavaScript -->
+    <script>
+        let currentModal = null;
+        let openTimer = null;
+        let closeTimer = null;
+        let isHoveringTrigger = false;
+        let isHoveringModal = false;
+        let mouseX = 0;
+        let mouseY = 0;
+        // Parallax mouse tracking (smoothed)
+        let parallaxCx = 0.5; // deprecated direct, keep for backwards-compat
+        let parallaxCy = 0.5; // deprecated direct, keep for backwards-compat
+        let targetCx = 0.5;
+        let targetCy = 0.5;
+        let smoothCx = 0.5;
+        let smoothCy = 0.5;
+        let rafId = null;
+        // Lava focus on hovered card
+        let lavaFocusActive = false;
+        let focusX = 0.5; // 0..1 viewport-relative
+        let focusY = 0.5; // 0..1 viewport-relative
+        let smoothBlobX = 0.5;
+        let smoothBlobY = 0.5;
+        let focusBlend = 0; // 0 = libre, 1 = concentrado
+
+        // Track mouse position
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            // Update target, smoothing will be applied in RAF
+            targetCx = mouseX / window.innerWidth;
+            targetCy = mouseY / window.innerHeight;
+        });
+
+        function instantHideModal(type) {
+            const modal = document.getElementById(type + '-modal');
+            if (!modal) return;
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
+
+        function isMouseOverElement(element) {
+            if (!element) return false;
+            const rect = element.getBoundingClientRect();
+            return mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
+        }
+
+        function positionModalAtTrigger(type) {
+            const modal = document.getElementById(type + '-modal');
+            const trigger = document.querySelector(`.modal-trigger[data-modal="${type}"]`);
+            if (!modal || !trigger) return;
+            const content = modal.querySelector('.modal-content');
+            const rect = trigger.getBoundingClientRect();
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const margin = 16;
+
+            const cw = content ? content.offsetWidth : 0;
+            const ch = content ? content.offsetHeight : 0;
+
+            let cx = rect.left + rect.width / 2;
+            let cy = rect.top + rect.height / 2;
+
+            const minX = margin + (cw ? cw / 2 : 0);
+            const maxX = vw - margin - (cw ? cw / 2 : 0);
+            const minY = margin + (ch ? ch / 2 : 0);
+            const maxY = vh - margin - (ch ? ch / 2 : 0);
+            cx = Math.min(Math.max(cx, minX), maxX);
+            cy = Math.min(Math.max(cy, minY), maxY);
+
+            if (content) {
+                content.style.left = `${cx}px`;
+                content.style.top = `${cy}px`;
+            }
+        }
+
+        function setFocusToTrigger(type) {
+            const trigger = document.querySelector(`.modal-trigger[data-modal="${type}"]`);
+            if (!trigger) return;
+            const rect = trigger.getBoundingClientRect();
+            focusX = (rect.left + rect.width / 2) / window.innerWidth;
+            focusY = (rect.top + rect.height / 2) / window.innerHeight;
+        }
+
+        function openModal(type) {
+            // Si es el mismo, no hacer nada
+            if (currentModal === type) return;
+
+            // Cerrar el anterior al instante para evitar parpadeo
+            if (currentModal && currentModal !== type) {
+                instantHideModal(currentModal);
+            }
+
+            currentModal = type;
+            const modal = document.getElementById(type + '-modal');
+            modal.style.display = 'block';
+            positionModalAtTrigger(type);
+            // Activar enfoque de lava en esta tarjeta
+            lavaFocusActive = true;
+            setFocusToTrigger(type);
+
+            requestAnimationFrame(() => {
+                modal.classList.add('active');
+            });
+        }
+
+        function closeModal(type) {
+            const modal = document.getElementById(type + '-modal');
+            if (!modal) return;
+            modal.classList.remove('active');
+            setTimeout(() => {
+                if (!modal.classList.contains('active')) {
+                    modal.style.display = 'none';
+                    if (currentModal === type) currentModal = null;
+                    // Desactivar enfoque de lava al cerrar
+                    lavaFocusActive = false;
+                }
+            }, 180);
+        }
+
+        function scheduleClose() {
+            if (closeTimer) clearTimeout(closeTimer);
+            closeTimer = setTimeout(() => {
+                if (!isHoveringTrigger && !isHoveringModal && currentModal) {
+                    closeModal(currentModal);
+                }
+            }, 120);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const triggers = document.querySelectorAll('.modal-trigger');
+            const modals = document.querySelectorAll('.modal');
+            const parallaxLayers = Array.from(document.querySelectorAll('#parallax-root [data-depth]'));
+
+            // Triggers (tarjetas) + efecto 3D
+            triggers.forEach(trigger => {
+                const type = trigger.dataset.modal;
+
+                // Efecto 3D multilayer por tarjeta
+                let rect;
+                function handleMove(e) {
+                    if (!rect) rect = trigger.getBoundingClientRect();
+                    const px = (e.clientX - rect.left) / rect.width;   // 0..1
+                    const py = (e.clientY - rect.top) / rect.height;  // 0..1
+                    const rx = (py - 0.5) * -10; // rotación X [-5,5]
+                    const ry = (px - 0.5) * 10;  // rotación Y [-5,5]
+                    trigger.style.setProperty('--rx', rx + 'deg');
+                    trigger.style.setProperty('--ry', ry + 'deg');
+                    trigger.style.setProperty('--mx', (px * 100) + '%');
+                    trigger.style.setProperty('--my', (py * 100) + '%');
+                }
+                function handleEnter() {
+                    rect = trigger.getBoundingClientRect();
+                }
+                function handleLeave() {
+                    rect = null;
+                    trigger.style.setProperty('--rx', '0deg');
+                    trigger.style.setProperty('--ry', '0deg');
+                    trigger.style.setProperty('--mx', '50%');
+                    trigger.style.setProperty('--my', '50%');
+                }
+                trigger.addEventListener('mouseenter', handleEnter);
+                trigger.addEventListener('mousemove', handleMove);
+                trigger.addEventListener('mouseleave', handleLeave);
+
+                trigger.addEventListener('mouseenter', () => {
+                    isHoveringTrigger = true;
+                    if (closeTimer) clearTimeout(closeTimer);
+                    if (openTimer) clearTimeout(openTimer);
+                    // Enfocar lava a esta tarjeta de inmediato
+                    lavaFocusActive = true;
+                    setFocusToTrigger(type);
+                    openTimer = setTimeout(() => {
+                        openModal(type);
+                    }, 80);
+                });
+
+                trigger.addEventListener('mouseleave', () => {
+                    isHoveringTrigger = false;
+                    scheduleClose();
+                    // Si no hay modal actual de esta tarjeta, liberar enfoque
+                    if (!currentModal || currentModal !== type) {
+                        lavaFocusActive = false;
+                    }
+                });
+            });
+
+            // Modales (solo el contenido mantiene abierto)
+            modals.forEach(modal => {
+                const content = modal.querySelector('.modal-content');
+                if (!content) return;
+
+                content.addEventListener('mouseenter', () => {
+                    isHoveringModal = true;
+                    if (closeTimer) clearTimeout(closeTimer);
+                    // Mantener enfoque de lava en la tarjeta activa
+                    if (currentModal) {
+                        lavaFocusActive = true;
+                        setFocusToTrigger(currentModal);
+                    }
+                });
+
+                content.addEventListener('mouseleave', () => {
+                    isHoveringModal = false;
+                    scheduleClose();
+                });
+            });
+
+            // Al hacer scroll: si el mouse ya no está sobre la tarjeta, cerrar. Si sigue, reposicionar.
+            window.addEventListener('scroll', () => {
+                if (!currentModal) return;
+                const trigger = document.querySelector(`.modal-trigger[data-modal="${currentModal}"]`);
+                if (!trigger) {
+                    instantHideModal(currentModal);
+                    currentModal = null;
+                    return;
+                }
+                if (!isMouseOverElement(trigger)) {
+                    closeModal(currentModal);
+                } else {
+                    positionModalAtTrigger(currentModal);
+                    // Actualizar enfoque de lava con la nueva posición de la tarjeta
+                    lavaFocusActive = true;
+                    setFocusToTrigger(currentModal);
+                }
+            }, { passive: true });
+
+            // Reposicionar en resize
+            window.addEventListener('resize', () => {
+                if (currentModal) positionModalAtTrigger(currentModal);
+            });
+
+            // Animación Parallax (mouse + scroll)
+            function renderParallax() {
+                // Smooth follow (lerp) so blobs are not glued to the cursor
+                const ease = 0.1; // lower = more delay
+                smoothCx += (targetCx - smoothCx) * ease;
+                smoothCy += (targetCy - smoothCy) * ease;
+                // Blobs target: mouse or focused card center
+                const blobTargetX = lavaFocusActive ? focusX : targetCx;
+                const blobTargetY = lavaFocusActive ? focusY : targetCy;
+                const blobEase = 0.12;
+                smoothBlobX += (blobTargetX - smoothBlobX) * blobEase;
+                smoothBlobY += (blobTargetY - smoothBlobY) * blobEase;
+                // Mezcla suave entre modo libre y concentrado
+                const focusEase = 0.12;
+                focusBlend += ((lavaFocusActive ? 1 : 0) - focusBlend) * focusEase;
+                const scrollY = window.scrollY || 0;
+                parallaxLayers.forEach(layer => {
+                    const depth = parseFloat(layer.getAttribute('data-depth') || '0');
+                    const tx = (smoothCx - 0.5) * depth * 50; // 0..25px aprox
+                    const ty = (smoothCy - 0.5) * depth * 50 + scrollY * depth * 0.3;
+                    layer.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+                    // Mover los centros de los blobs con mezcla suave
+                    const free1x = 10 + smoothBlobX * 80; // 10% .. 90%
+                    const free1y = 15 + smoothBlobY * 70; // 15% .. 85%
+                    const free2x = 90 - smoothBlobX * 70; // 90% .. 20%
+                    const free2y = 85 - smoothBlobY * 60; // 85% .. 25%
+                    const free3x = 20 + (1 - smoothBlobX) * 60; // 20% .. 80%
+                    const free3y = 20 + smoothBlobY * 60; // 20% .. 80%
+                    const baseX = 12 + smoothBlobX * 76; // 12% .. 88%
+                    const baseY = 12 + smoothBlobY * 76; // 12% .. 88%
+                    const inv = 1 - focusBlend;
+                    const c1x = free1x * inv + baseX * focusBlend;
+                    const c1y = free1y * inv + baseY * focusBlend;
+                    const c2x = free2x * inv + baseX * focusBlend;
+                    const c2y = free2y * inv + baseY * focusBlend;
+                    const c3x = free3x * inv + baseX * focusBlend;
+                    const c3y = free3y * inv + baseY * focusBlend;
+                    layer.style.setProperty('--c1x', c1x + '%');
+                    layer.style.setProperty('--c1y', c1y + '%');
+                    layer.style.setProperty('--c2x', c2x + '%');
+                    layer.style.setProperty('--c2y', c2y + '%');
+                    layer.style.setProperty('--c3x', c3x + '%');
+                    layer.style.setProperty('--c3y', c3y + '%');
+                });
+                rafId = requestAnimationFrame(renderParallax);
+            }
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(renderParallax);
+            window.addEventListener('beforeunload', () => { if (rafId) cancelAnimationFrame(rafId); });
+
+            // Art Portfolio Card Effects
+            const artCard = document.querySelector('.art-portfolio-card');
+            if (artCard) {
+                // 3D Multi-Layer Parallax Effect
+                let artRect;
+                let artLayers = artCard.querySelectorAll('.art-layer');
+                let artElements = artCard.querySelectorAll('.art-element, .art-3d-element');
+                let artContent = artCard.querySelector('.art-content-3d');
+                let artIcon = artCard.querySelector('.art-icon-3d');
+                let artText = artCard.querySelector('.art-text-3d');
+                let artButton = artCard.querySelector('.art-button-3d');
+                let artTags = artCard.querySelectorAll('.art-tag');
+                function handleArtMove(e) {
+                    if (!artRect) artRect = artCard.getBoundingClientRect();
+                    const px = (e.clientX - artRect.left) / artRect.width;
+                    const py = (e.clientY - artRect.top) / artRect.height;
+                    // Calculate 3D tilt
+                    const rx = (py - 0.5) * -12; // Enhanced tilt
+                    const ry = (px - 0.5) * 10;
+                    
+                    // Apply 3D transform to main card
+                    artCard.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
+                    
+                    // Multi-layer parallax effect
+                    artLayers.forEach((layer, index) => {
+                        const depth = (index + 1) * 5;
+                        const moveX = (px - 0.5) * depth;
+                        const moveY = (py - 0.5) * depth;
+                        layer.style.transform = `translate3d(${moveX}px, ${moveY}px, ${-depth * 2}px)`;
+                    });
+                    
+                    // Floating elements parallax
+                    artElements.forEach((element, index) => {
+                        const depth = (index % 3 + 1) * 8;
+                        const moveX = (px - 0.5) * depth * 0.5;
+                        const moveY = (py - 0.5) * depth * 0.5;
+                        const currentTransform = element.style.transform;
+                        const baseTransform = currentTransform.includes('translateZ') ? 
+                            currentTransform.replace(/translate3d\([^)]+\)/, '') : 
+                            currentTransform;
+                        element.style.transform = `${baseTransform} translate3d(${moveX}px, ${moveY}px, ${depth}px)`;
+                    });
+                    
+                    // Content 3D depth effect
+                    if (artContent) {
+                        const contentDepth = 15;
+                        const contentMoveX = (px - 0.5) * contentDepth * 0.3;
+                        const contentMoveY = (py - 0.5) * contentDepth * 0.3;
+                        artContent.style.transform = `translate3d(${contentMoveX}px, ${contentMoveY}px, ${contentDepth}px)`;
+                    }
+                    
+                    // Individual element depth effects
+                    if (artIcon) {
+                        const iconDepth = 25;
+                        const iconMoveX = (px - 0.5) * iconDepth * 0.4;
+                        const iconMoveY = (py - 0.5) * iconDepth * 0.4;
+                        artIcon.style.transform = `translate3d(${iconMoveX}px, ${iconMoveY}px, ${iconDepth}px)`;
+                    }
+                    
+                    if (artText) {
+                        const textDepth = 20;
+                        const textMoveX = (px - 0.5) * textDepth * 0.2;
+                        const textMoveY = (py - 0.5) * textDepth * 0.2;
+                        artText.style.transform = `translate3d(${textMoveX}px, ${textMoveY}px, ${textDepth}px)`;
+                    }
+                    
+                    if (artButton) {
+                        const buttonDepth = 30;
+                        const buttonMoveX = (px - 0.5) * buttonDepth * 0.5;
+                        const buttonMoveY = (py - 0.5) * buttonDepth * 0.5;
+                        artButton.style.transform = `translate3d(${buttonMoveX}px, ${buttonMoveY}px, ${buttonDepth}px)`;
+                    }
+                    
+                    // Tags individual depth
+                    artTags.forEach((tag, index) => {
+                        const tagDepth = 10 + (index * 2);
+                        const tagMoveX = (px - 0.5) * tagDepth * 0.3;
+                        const tagMoveY = (py - 0.5) * tagDepth * 0.3;
+                        tag.style.transform = `translate3d(${tagMoveX}px, ${tagMoveY}px, ${tagDepth}px)`;
+                    });
+                }
+                function handleArtEnter() {
+                    artRect = artCard.getBoundingClientRect();
+                    // Focus lava lamps on art card
+                    lavaFocusActive = true;
+                    setFocusToTrigger(artCard);
+                    
+                    // Add hover class for enhanced effects
+                    artCard.classList.add('art-hover-active');
+                    
+                    // Animate layers in
+                    artLayers.forEach((layer, index) => {
+                        layer.style.transition = `all 0.6s cubic-bezier(0.4, 0, 0.2, 1)`;
+                        setTimeout(() => {
+                            layer.style.filter = `blur(${Math.max(0, 2 - index * 0.5)}px)`;
+                        }, index * 100);
+                    });
+                    
+                    // Animate floating elements
+                    artElements.forEach((element, index) => {
+                        element.style.animationPlayState = 'running';
+                        element.style.animationDuration = `${8 + index * 0.5}s`;
+                    });
+                }
+                function handleArtLeave() {
+                    artRect = null;
+                    
+                    // Reset all transforms
+                    artCard.style.transform = '';
+                    artLayers.forEach(layer => {
+                        layer.style.transform = '';
+                        layer.style.filter = '';
+                    });
+                    artElements.forEach(element => {
+                        element.style.transform = '';
+                        element.style.animationPlayState = 'paused';
+                    });
+                    if (artContent) artContent.style.transform = '';
+                    if (artIcon) artIcon.style.transform = '';
+                    if (artText) artText.style.transform = '';
+                    if (artButton) artButton.style.transform = '';
+                    artTags.forEach(tag => tag.style.transform = '');
+                    
+                    // Remove hover class
+                    artCard.classList.remove('art-hover-active');
+                    
+                    // Deactivate lava focus
+                    lavaFocusActive = false;
+                }
+
+                artCard.addEventListener('mousemove', handleArtMove);
+                artCard.addEventListener('mouseenter', handleArtEnter);
+                artCard.addEventListener('mouseleave', handleArtLeave);
+            }
+        });
+
+        // Cerrar con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && currentModal) {
+                instantHideModal(currentModal);
+                currentModal = null;
+            }
+        });
+    </script>
+</body>
+</html>
