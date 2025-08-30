@@ -1,0 +1,79 @@
+/* Base Styles */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 1rem; /* Add rounded corners */
+}
+
+.gradient-bg-2 {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border-radius: 1rem; /* Add rounded corners */
+}
+
+.gradient-bg-3 {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    border-radius: 1rem; /* Add rounded corners */
+}
+
+.gradient-bg-4 {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    border-radius: 1rem; /* Add rounded corners */
+}
+
+.gradient-bg-5 {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    border-radius: 1rem; /* Add rounded corners */
+}
+
+.gradient-bg-6 {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    border-radius: 1rem; /* Add rounded corners */
+}
+
+/* Glass Button Secondary */
+.glass-button-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-weight: 500;
+}
+
+.glass-button-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Prevent horizontal scroll */
+.glass-card {
+    overflow: hidden;
+}
+
+/* Modal Container */
+.modal {
+    position: fixed;
+    inset: 0;
+}
+
+/* Modal Content */
+.modal .modal-content {
+    width: min(95vw, 720px);
+    max-height: 75vh;
+}
